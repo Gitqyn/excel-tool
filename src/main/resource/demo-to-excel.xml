@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<class name="com.eu.model.Demo">
+   <property name="id" colum="id"/>
+   <property name="userName" colum="用户名"/>
+   <property name="department" colum="部门"/>
+   <property name="userCode" colum="编号"/>
+   <property name="age" colum="年龄"/>
+</class>

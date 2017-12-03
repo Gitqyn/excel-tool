@@ -57,7 +57,7 @@ public class classConfigHelper {
     }
 
     public static void main(String[] args) {
-        createConfigXML(Demo.class,System.getProperty("user.dir") + File.separator + "src" + File.separator+"main" +File.separator+"resource");
+        createConfigXML(Demo.class,System.getProperty("user.dir") +File.separator+ "src/main/resource");
     }
 
 

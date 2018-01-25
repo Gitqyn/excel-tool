@@ -11,7 +11,7 @@ import com.eu.annoation.ColumName;
 public class Demo {
 
     @ColumName(des="id")
-    private String id;
+    private Integer id;
 
     @ColumName(des="用户名")
     private String userName;
@@ -28,11 +28,11 @@ public class Demo {
     public Demo() {
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -66,5 +66,16 @@ public class Demo {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Demo{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", department='" + department + '\'' +
+                ", userCode='" + userCode + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

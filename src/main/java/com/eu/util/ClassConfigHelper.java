@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
  * @auther fuyangrong
  * @create 2017/12/1
  */
-public class classConfigHelper {
+public class ClassConfigHelper {
 
 
     static void createConfigXML(Class c,String filePath) {

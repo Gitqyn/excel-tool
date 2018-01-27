@@ -1,21 +1,15 @@
 package com.eu.util;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
-
+import static org.apache.poi.ss.usermodel.Cell.*;
 
 
 /**
@@ -51,44 +45,47 @@ public class ExcelImportUtil {
                 System.out.println("\nROW " + row.getRowNum() + " has " + row.getPhysicalNumberOfCells() + " cell(s).");
                 for (int c = 0; c < row.getLastCellNum(); c++) {
                     HSSFCell cell = row.getCell(c);
-                    String value;
+                    formatCellValue(cell);
 
-                    if (cell != null) {
-                        switch (cell.getCellType()) {
-
-                            case FORMULA:
-                                value = "FORMULA value=" + cell.getCellFormula();
-                                break;
-
-                            case NUMERIC:
-                                value = "NUMERIC value=" + cell.getNumericCellValue();
-                                break;
-
-                            case STRING:
-                                value = "STRING value=" + cell.getStringCellValue();
-                                break;
-
-                            case BLANK:
-                                value = "<BLANK>";
-                                break;
-
-                            case BOOLEAN:
-                                value = "BOOLEAN value-" + cell.getBooleanCellValue();
-                                break;
-
-                            case ERROR:
-                                value = "ERROR value=" + cell.getErrorCellValue();
-                                break;
-
-                            default:
-                                value = "UNKNOWN value of type " + cell.getCellType();
-                        }
-                        System.out.println("CELL col=" + cell.getColumnIndex() + " VALUE="
-                                + value);
-                    }
                 }
             }
         }
+    }
+
+    @Deprecated
+    private static String formatCellValue(Cell cell){
+        String value ="";
+        if (cell != null) {
+            switch (cell.getCellType()) {
+                case CELL_TYPE_FORMULA:
+                    value = cell.getCellFormula();
+                    break;
+
+                case CELL_TYPE_NUMERIC:
+                    value = String.valueOf(cell.getNumericCellValue());
+                    break;
+
+                case CELL_TYPE_STRING:
+                    value = cell.getStringCellValue();
+                    break;
+
+                case CELL_TYPE_BLANK:
+                    value = "";
+                    break;
+
+                case CELL_TYPE_BOOLEAN:
+                    value = String.valueOf(cell.getBooleanCellValue());
+                    break;
+
+                case CELL_TYPE_ERROR:
+                    value = String.valueOf(cell.getErrorCellValue());
+                    break;
+
+                default:
+                    value = "UNKNOWN value of type " + cell.getCellType();
+            }
+        }
+        return value;
     }
 
 }

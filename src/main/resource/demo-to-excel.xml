@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <class name="com.eu.model.Demo">
-   <property name="id" colum="id"/>
-   <property name="userName" colum="用户名"/>
-   <property name="department" colum="部门"/>
-   <property name="userCode" colum="编号"/>
-   <property name="age" colum="年龄"/>
+   <property name="id" colum="id" javaType="java.lang.Integer"/>
+   <property name="userName" colum="用户名" javaType="java.lang.String"/>
+   <property name="department" colum="部门" javaType="java.lang.String"/>
+   <property name="userCode" colum="编号" javaType="java.lang.String"/>
+   <property name="age" colum="年龄" javaType="java.lang.Integer"/>
 </class>

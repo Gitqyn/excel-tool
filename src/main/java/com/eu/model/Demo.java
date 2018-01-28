@@ -23,7 +23,7 @@ public class Demo {
     private String userCode;
 
     @ColumName(des="年龄")
-    private int age;
+    private Integer age;
 
     public Demo() {
     }
@@ -60,11 +60,11 @@ public class Demo {
         this.userCode = userCode;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

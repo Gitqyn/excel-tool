@@ -19,10 +19,10 @@ import java.lang.reflect.Field;
  * @auther fuyangrong
  * @create 2017/12/1
  */
-public class ClassConfigHelper {
+public class GenerateConfigXmlHelper {
 
 
-    static void createConfigXML(Class c,String filePath) {
+    public static void createConfigXML(Class c,String filePath) {
         //建立document对象，操作xml
         Document doc = DocumentHelper.createDocument();
         //设置xml编码
@@ -38,6 +38,7 @@ public class ClassConfigHelper {
             Element e = root.addElement("property");
             e.addAttribute("name", field.getName());
             e.addAttribute("colum", null != field.getDeclaredAnnotation(ColumName.class).des() ? field.getDeclaredAnnotation(ColumName.class).des() : "");
+            e.addAttribute("javaType", field.getType().getName());
         }
         try {
             OutputFormat xmlFormat = new OutputFormat();
@@ -56,9 +57,7 @@ public class ClassConfigHelper {
 
     }
 
-    public static void main(String[] args) {
-        createConfigXML(Demo.class,System.getProperty("user.dir") +File.separator+ "src/main/resource");
-    }
+
 
 
 }

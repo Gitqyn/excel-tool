@@ -68,7 +68,6 @@ public class ExcelImportUtil {
                     continue;
                 }
 
-                System.out.println("\nROW " + row.getRowNum() + " has " + row.getPhysicalNumberOfCells() + " cell(s).");
                 T object = (T)c.newInstance();
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);

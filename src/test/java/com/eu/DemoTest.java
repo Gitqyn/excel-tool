@@ -6,6 +6,7 @@ import com.eu.util.GenerateConfigXmlHelper;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 
@@ -14,7 +15,9 @@ public class DemoTest {
 
     @Test
     public void importExcel(){
-        File file= new File("F:"+File.separator+"demo.xlsx");
+        long start = System.currentTimeMillis();
+        System.out.println(System.currentTimeMillis());
+        File file= new File(System.getProperty("user.dir") +"/doc/demo.xlsx");
         File configXml = new File(System.getProperty("user.dir") +File.separator+ "src/main/resource/"+"demo-to-excel.xml");
         List<Demo> list = null;
         try{
@@ -22,7 +25,10 @@ public class DemoTest {
         }catch (Exception e){
             e.printStackTrace();
         }
+        System.out.println("总数："+list.size());
         System.out.println(list.toString());
+        long end = System.currentTimeMillis();
+        System.out.println("总耗时："+(end-start));
 
     }
 

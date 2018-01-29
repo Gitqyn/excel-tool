@@ -9,11 +9,12 @@ excel导入导出通用组件
 
 ### 使用步骤:
 
-###导入
+### 导入
 
 ##### 1、生成配置文件
 调用自动生成配置文件工具类：
-  `GenerateConfigXmlHelper.createConfigXML(Class c, String filePath)`
+
+`GenerateConfigXmlHelper.createConfigXML(Class c, String filePath)`
   
 参数
 - `c`: excel数据导入后保存到该实体类
@@ -142,7 +143,7 @@ Process finished with exit code 0
 
 ### 导出
 
-调用excel导出工具类
+调用excel导出工具类：
 
 `ExcelExportUtil.exportExcel(List<?> list, File configXml, String sheetName, String bookName)
 `

@@ -1,14 +1,17 @@
 # excel-tool
 excel导入导出通用组件
 
-**版本**：
+###版本：
 - jdk: 1.8
 - poi: 3.17
 - dom4j: 1.6.1
 
 
-**使用步骤：**
-#### 1、生成配置文件
+###使用步骤:
+
+###导入
+
+##### 1、生成配置文件
 调用自动生成配置文件工具类：
   `GenerateConfigXmlHelper.createConfigXML(Class c, String filePath)`
   
@@ -103,7 +106,7 @@ _class_
 ```
 _生成的配置文件_
 
-#### 2、配置excel列和class属性的映射关系
+##### 2、配置excel列和class属性的映射关系
 
 根节点`class`只有一个元素`name`,值为类的全限定名
 
@@ -111,10 +114,11 @@ _生成的配置文件_
 - `name`： class的属性名
 - `colum`： excle的列名
 - `javaType`： class的属性的声明类型
+- `enable`:  可选属性，默认值true，值为false时，解析该配置文件将跳过此行
 
 _注：以上节点均为必填_，其中如果在`class`中的属性上使用`@ColumName(des="colum")`注解，`colum`元素值也会自动填充
 
-### 3、导入excel
+##### 3、导入excel
 调用excel导入工具类
 
 `ExcelImportUtil.convertToClass(File excel, File configXml)`
@@ -135,3 +139,17 @@ Sheet 0 "Sheet1" has 1007 row(s).
 Process finished with exit code 0
 
 ```
+
+###导出
+
+调用excel导出工具类
+
+`ExcelExportUtil.exportExcel(List<?> list, File configXml, String sheetName, String bookName)
+`
+
+参数：
+- `list`: 需要导出的数据集合
+- `configXml`: 配置文件
+- `sheetName`:  sheet名称,可传null
+- `bookName`:   工作簿名称,可传null
+

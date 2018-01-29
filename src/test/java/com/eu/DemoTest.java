@@ -1,7 +1,9 @@
 package com.eu;
 
+import com.eu.util.ExcelExportUtil;
 import com.eu.util.ExcelImportUtil;
 import com.eu.util.GenerateConfigXmlHelper;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Test;
 
 import java.io.File;
@@ -42,6 +44,25 @@ public class DemoTest {
         System.out.println(list.toString());
         long end = System.currentTimeMillis();
         System.out.println("总耗时："+(end-start));
+
+    }
+
+    @Test
+    public void exportExcel(){
+        File configXml = new File(System.getProperty("user.dir") +File.separator+ "src/test/resource/"+"demo-to-excel.xml");
+        File file= new File(System.getProperty("user.dir") +"/doc/demo.xlsx");
+        List<Demo> list = null;
+        try{
+            list = ExcelImportUtil.convertToClass(file,configXml);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try {
+            ExcelExportUtil.exportExcel(list,configXml,null,"demo");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

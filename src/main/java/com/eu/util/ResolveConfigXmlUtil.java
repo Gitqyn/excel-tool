@@ -37,10 +37,14 @@ public class ResolveConfigXmlUtil {
             String name = property.attributeValue("name");
             String colum = property.attributeValue("colum");
             String javaType = property.attributeValue("javaType");
-            model.setFieldName(name);
-            model.setColunmName(colum);
-            model.setJavaType(javaType);
-            list.add(model);
+            String enable = property.attributeValue("enable");
+            boolean isenable = enable.isEmpty()?true:Boolean.parseBoolean(enable);
+            if(isenable){
+                model.setFieldName(name);
+                model.setColunmName(colum);
+                model.setJavaType(javaType);
+                list.add(model);
+            }
         }
         map.put("list", list);
 

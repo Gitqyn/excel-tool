@@ -43,6 +43,8 @@ public class GenerateConfigXmlHelper {
             e.addAttribute("name", field.getName());
             e.addAttribute("colum", null != field.getDeclaredAnnotation(ColumName.class).des() ? field.getDeclaredAnnotation(ColumName.class).des() : "");
             e.addAttribute("javaType", field.getType().getName());
+            e.addAttribute("enable", "true");
+
         }
         try {
             OutputFormat xmlFormat = new OutputFormat();

@@ -19,6 +19,8 @@ public class Model {
 
     private Integer index;//colunmName在excel行中的下标
 
+    private boolean enable;//是否忽略
+
     public String getFieldName() {
         return fieldName;
     }
@@ -65,5 +67,13 @@ public class Model {
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

@@ -137,12 +137,12 @@ public class ExcelImportUtil {
         return value;
     }
 
-    private static Map<String, Object> getMapRelation(Row row, File file) throws Exception {
+    private static Map<String, Object> getMapRelation(Row row, File configXml) throws Exception {
         Map<String, Object> map = new HashMap();
         if (row == null) {
             throw new Exception("导入的excel的首行不能为空");
         }
-        Map<String, Object> rcxu = ResolveConfigXmlUtil.getAssociation(file);
+        Map<String, Object> rcxu = ResolveConfigXmlUtil.getAssociation(configXml);
         map.put("className", rcxu.get("className").toString());
         List<Model> list = (List<Model>) rcxu.get("list");
 

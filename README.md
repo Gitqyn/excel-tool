@@ -112,7 +112,7 @@ _生成的配置文件_
 - `colum`： excle的列名
 - `javaType`： class的属性的声明类型
 
-_注：以上节点均为必填_，其中如果在`class`中的属性上使用`@ColumName(des="colum")`注解，该元素值也会自动填充
+_注：以上节点均为必填_，其中如果在`class`中的属性上使用`@ColumName(des="colum")`注解，`colum`元素值也会自动填充
 
 ### 3、导入excel
 调用excel导入工具类

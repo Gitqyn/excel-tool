@@ -1,7 +1,6 @@
 package com.eu.util;
 
 import com.eu.annoation.ColumName;
-import com.eu.model.Demo;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
- * 根据实体生成和excle列映射的xml文件
+ * 自动生成配置文件工具
  *
  * @auther fuyangrong
  * @create 2017/12/1
@@ -22,7 +21,12 @@ import java.lang.reflect.Field;
 public class GenerateConfigXmlHelper {
 
 
-    public static void createConfigXML(Class c,String filePath) {
+    /**
+     * 生成配置文件
+     * @param c        实体类
+     * @param filePath 存放路径
+     */
+    public static void createConfigXML(Class c, String filePath) {
         //建立document对象，操作xml
         Document doc = DocumentHelper.createDocument();
         //设置xml编码
@@ -47,17 +51,15 @@ public class GenerateConfigXmlHelper {
             //缩进
             xmlFormat.setIndent(true);
             xmlFormat.setIndent("   ");
-            XMLWriter writer = new XMLWriter(new FileWriter(new File(filePath+ File.separator + c.getSimpleName().toLowerCase() + "-to-excel.xml")),xmlFormat);
+            XMLWriter writer = new XMLWriter(new FileWriter(new File(filePath + File.separator + c.getSimpleName().toLowerCase() + "-to-excel.xml")), xmlFormat);
             writer.write(doc);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println("自动生成配置文件成功");
 
     }
-
-
 
 
 }

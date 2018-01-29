@@ -25,23 +25,21 @@ import static org.apache.poi.ss.usermodel.Cell.*;
 
 /**
  * excel导入工具类
- *
  * @auther fuyangrong
  * @create 2017/12/4
  */
 public class ExcelImportUtil {
-
 
     private static Workbook readFile(File file) throws Exception {
         InputStream fis = new FileInputStream(file);
         Workbook workbook = null;
         String fileName = file.getName();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        if(".xlsx".equals(suffix)){
+        if (".xlsx".equals(suffix)) {
             workbook = new XSSFWorkbook(fis);
-        }else if(".xls".equals(suffix)){
+        } else if (".xls".equals(suffix)) {
             workbook = new HSSFWorkbook(fis);
-        }else {
+        } else {
             throw new Exception("文件类型错误，必须是以“.xls”或“xlsx”结尾的文件");
         }
         fis.close();
@@ -49,7 +47,14 @@ public class ExcelImportUtil {
 
     }
 
-    public static <T> List<T> convertToClass(File excel,File configXml) throws Exception {
+    /**
+     * 将excel行转换为需要的类对象集合
+     * @param excel
+     * @param configXml
+     * @return List<T>
+     * @throws Exception
+     */
+    public static <T> List<T> convertToClass(File excel, File configXml) throws Exception {
         List<T> list = new ArrayList<>();
         Workbook wb = ExcelImportUtil.readFile(excel);
         FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
@@ -60,7 +65,7 @@ public class ExcelImportUtil {
             System.out.println("Sheet " + k + " \"" + wb.getSheetName(k) + "\" has " + rows
                     + " row(s).");
             Row firstRow = sheet.getRow(0);
-            Map<String,Object> map = getMapRelation(firstRow,configXml);
+            Map<String, Object> map = getMapRelation(firstRow, configXml);
             Class c = Class.forName(map.get("className").toString());
             for (int r = 1; r < rows; r++) {
                 Row row = sheet.getRow(r);
@@ -68,23 +73,23 @@ public class ExcelImportUtil {
                     continue;
                 }
 
-                T object = (T)c.newInstance();
+                T object = (T) c.newInstance();
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
-                    Object cellValue = formatCellValue(cell,evaluator);
-                    Model model = (Model)map.get(String.valueOf(i));
-                    String fieldName= model.getFieldName();
+                    Object cellValue = formatCellValue(cell, evaluator);
+                    Model model = (Model) map.get(String.valueOf(i));
+                    String fieldName = model.getFieldName();
                     String javaType = model.getJavaType();
                     Class c2 = Class.forName(javaType);
-                    if(c2==String.class && cellValue instanceof Double){
-                        double dnum = (Double) formatCellValue(cell,evaluator);
-                        cellValue = String.valueOf((int)dnum);
-                    }else if(c2==Integer.class){
-                        double dnum = (Double) formatCellValue(cell,evaluator);
-                        cellValue = new Integer((int)dnum);
+                    if (c2 == String.class && cellValue instanceof Double) {
+                        double dnum = (Double) formatCellValue(cell, evaluator);
+                        cellValue = String.valueOf((int) dnum);
+                    } else if (c2 == Integer.class) {
+                        double dnum = (Double) formatCellValue(cell, evaluator);
+                        cellValue = new Integer((int) dnum);
                     }
-                    Method method = c.getDeclaredMethod("set"+String.valueOf(fieldName.charAt(0)).toUpperCase()+fieldName.substring(1),c2);
-                    method.invoke(object,cellValue);
+                    Method method = c.getDeclaredMethod("set" + String.valueOf(fieldName.charAt(0)).toUpperCase() + fieldName.substring(1), c2);
+                    method.invoke(object, cellValue);
                 }
                 list.add(object);
             }
@@ -93,7 +98,7 @@ public class ExcelImportUtil {
     }
 
     @SuppressWarnings("deprecation")
-    private static Object formatCellValue(Cell cell, FormulaEvaluator evaluator) throws Exception{
+    private static Object formatCellValue(Cell cell, FormulaEvaluator evaluator) throws Exception {
         Object value = null;
         if (cell != null) {
             switch (cell.getCellType()) {
@@ -102,8 +107,8 @@ public class ExcelImportUtil {
                     break;
                 case CELL_TYPE_NUMERIC:
                     if (DateUtil.isCellDateFormatted(cell)) {
-                       SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                       value = simpleDateFormat.format(cell.getDateCellValue());
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        value = simpleDateFormat.format(cell.getDateCellValue());
                     } else {
                         value = new Double(cell.getNumericCellValue());
                     }
@@ -132,21 +137,21 @@ public class ExcelImportUtil {
         return value;
     }
 
-    private static Map<String, Object> getMapRelation(Row row, File file) throws Exception{
-        Map<String,Object> map = new HashMap();
-        if(row==null){
+    private static Map<String, Object> getMapRelation(Row row, File file) throws Exception {
+        Map<String, Object> map = new HashMap();
+        if (row == null) {
             throw new Exception("导入的excel的首行不能为空");
         }
-        Map<String,Object> rcxu = ResolveConfigXmlUtil.getAssociation(file);
-        map.put("className",rcxu.get("className").toString());
-        List<Model> list = (List<Model>)rcxu.get("list");
+        Map<String, Object> rcxu = ResolveConfigXmlUtil.getAssociation(file);
+        map.put("className", rcxu.get("className").toString());
+        List<Model> list = (List<Model>) rcxu.get("list");
 
         for (int i = 0; i < row.getLastCellNum(); i++) {
-            Cell cell =  row.getCell(i);
+            Cell cell = row.getCell(i);
             String cellValue = cell.getStringCellValue();
-            Model m = list.stream().filter(model -> cellValue.equals(model.getColunmNam())).findFirst().get();
+            Model m = list.stream().filter(model -> cellValue.equals(model.getColunmName())).findFirst().get();
             m.setIndex(i);
-            map.put(String.valueOf(i),m);
+            map.put(String.valueOf(i), m);
         }
         return map;
     }

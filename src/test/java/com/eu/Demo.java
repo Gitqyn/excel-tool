@@ -1,4 +1,4 @@
-package com.eu.model;
+package com.eu;
 
 import com.eu.annoation.ColumName;
 

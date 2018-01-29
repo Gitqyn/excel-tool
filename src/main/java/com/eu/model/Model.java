@@ -1,26 +1,23 @@
 package com.eu.model;
 
+/**
+ * 配置文件实体类
+ * @auther fuyangrong
+ * @create 2017/01/29
+ */
 public class Model {
 
-    private String fieldName;
+    private String fieldName;//属性名
 
-    private String colunmNam;
+    private String colunmName;//列名
 
-    private String javaType;
+    private String javaType;//fieldName的java数据类型
 
-    private String validate;
+    private String validate;//验证规则
 
-    private String validateMessage;
+    private String validateMessage;//验证提示信息
 
-    private Integer index;
-
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
+    private Integer index;//colunmName在excel行中的下标
 
     public String getFieldName() {
         return fieldName;
@@ -30,12 +27,20 @@ public class Model {
         this.fieldName = fieldName;
     }
 
-    public String getColunmNam() {
-        return colunmNam;
+    public String getColunmName() {
+        return colunmName;
     }
 
-    public void setColunmNam(String colunmNam) {
-        this.colunmNam = colunmNam;
+    public void setColunmName(String colunmName) {
+        this.colunmName = colunmName;
+    }
+
+    public String getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(String javaType) {
+        this.javaType = javaType;
     }
 
     public String getValidate() {
@@ -54,11 +59,11 @@ public class Model {
         this.validateMessage = validateMessage;
     }
 
-    public String getJavaType() {
-        return javaType;
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setJavaType(String javaType) {
-        this.javaType = javaType;
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 }

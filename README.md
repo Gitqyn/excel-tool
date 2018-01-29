@@ -98,11 +98,11 @@ _class_
 <?xml version="1.0" encoding="UTF-8"?>
 
 <class name="com.eu.Demo">
-   <property name="id" colum="id" javaType="java.lang.Integer"/>
-   <property name="userName" colum="用户名" javaType="java.lang.String"/>
-   <property name="department" colum="部门" javaType="java.lang.String"/>
-   <property name="userCode" colum="编号" javaType="java.lang.String"/>
-   <property name="age" colum="年龄" javaType="java.lang.Integer"/>
+   <property name="id" colum="id" javaType="java.lang.Integer" enable="true"/>
+   <property name="userName" colum="用户名" javaType="java.lang.String" enable="true"/>
+   <property name="department" colum="部门" javaType="java.lang.String" enable="true"/>
+   <property name="userCode" colum="编号" javaType="java.lang.String" enable="true"/>
+   <property name="age" colum="年龄" javaType="java.lang.Integer" enable="true"/>
 </class>
 ```
 _生成的配置文件_

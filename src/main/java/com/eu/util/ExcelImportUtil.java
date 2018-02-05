@@ -30,14 +30,18 @@ import static org.apache.poi.ss.usermodel.Cell.*;
  */
 public class ExcelImportUtil {
 
+    private static final String XLSX_SUFFIX = ".xlsx";
+    private static final String XLS_SUFFIX = ".xls";
+
+
     private static Workbook readFile(File file) throws Exception {
         InputStream fis = new FileInputStream(file);
         Workbook workbook = null;
         String fileName = file.getName();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        if (".xlsx".equals(suffix)) {
+        if (XLSX_SUFFIX.equals(suffix)) {
             workbook = new XSSFWorkbook(fis);
-        } else if (".xls".equals(suffix)) {
+        } else if (XLS_SUFFIX.equals(suffix)) {
             workbook = new HSSFWorkbook(fis);
         } else {
             throw new Exception("文件类型错误，必须是以“.xls”或“xlsx”结尾的文件");

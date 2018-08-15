@@ -31,7 +31,7 @@ public class GenerateConfigXmlHelper {
         //建立document对象，操作xml
         Document doc = DocumentHelper.createDocument();
         //设置xml编码
-        //doc.setXMLEncoding("utf-8");
+        doc.setXMLEncoding("utf-8");
         //设置根节点
         Element root = doc.addElement("class");
         //添加根节点属性

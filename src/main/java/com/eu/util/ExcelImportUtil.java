@@ -1,22 +1,14 @@
 package com.eu.util;
 
 import com.eu.model.Model;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -25,6 +17,7 @@ import static org.apache.poi.ss.usermodel.Cell.*;
 
 /**
  * excel导入工具类
+ *
  * @auther fuyangrong
  * @create 2017/12/4
  */
@@ -49,11 +42,13 @@ public class ExcelImportUtil {
 
     /**
      * 将excel行转换为需要的类对象集合
+     *
      * @param excel
      * @param configXml
      * @return List<T>
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public static <T> List<T> convertToClass(File excel, File configXml) throws Exception {
         List<T> list = new ArrayList<>();
         Workbook wb = ExcelImportUtil.readFile(excel);
@@ -86,7 +81,7 @@ public class ExcelImportUtil {
                         cellValue = String.valueOf((int) dnum);
                     } else if (c2 == Integer.class) {
                         double dnum = (Double) formatCellValue(cell, evaluator);
-                        cellValue = new Integer((int) dnum);
+                        cellValue = (int) dnum;
                     }
                     Method method = c.getDeclaredMethod("set" + String.valueOf(fieldName.charAt(0)).toUpperCase() + fieldName.substring(1), c2);
                     method.invoke(object, cellValue);
@@ -103,14 +98,14 @@ public class ExcelImportUtil {
         if (cell != null) {
             switch (cell.getCellType()) {
                 case CELL_TYPE_FORMULA:
-                    value = new Integer(evaluator.evaluateFormulaCell(cell));
+                    value = evaluator.evaluateFormulaCell(cell);
                     break;
                 case CELL_TYPE_NUMERIC:
                     if (DateUtil.isCellDateFormatted(cell)) {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         value = simpleDateFormat.format(cell.getDateCellValue());
                     } else {
-                        value = new Double(cell.getNumericCellValue());
+                        value = cell.getNumericCellValue();
                     }
                     break;
 
@@ -123,7 +118,7 @@ public class ExcelImportUtil {
                     break;
 
                 case CELL_TYPE_BOOLEAN:
-                    value = new Boolean(cell.getBooleanCellValue());
+                    value = cell.getBooleanCellValue();
                     break;
 
                 case CELL_TYPE_ERROR:
@@ -137,11 +132,13 @@ public class ExcelImportUtil {
         return value;
     }
 
+
+    @SuppressWarnings("unchecked")
     private static Map<String, Object> getMapRelation(Row row, File configXml) throws Exception {
-        Map<String, Object> map = new HashMap();
         if (row == null) {
             throw new Exception("导入的excel的首行不能为空");
         }
+        Map<String, Object> map = new HashMap(row.getLastCellNum());
         Map<String, Object> rcxu = ResolveConfigXmlUtil.getAssociation(configXml);
         map.put("className", rcxu.get("className").toString());
         List<Model> list = (List<Model>) rcxu.get("list");
@@ -149,7 +146,13 @@ public class ExcelImportUtil {
         for (int i = 0; i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             String cellValue = cell.getStringCellValue();
-            Model m = list.stream().filter(model -> cellValue.equals(model.getColunmName())).findFirst().get();
+            Optional<Model> optional = list.stream().filter(model -> cellValue.equals(model.getColunmName())).findFirst();
+            Model m;
+            if (optional.isPresent()) {
+                m = optional.get();
+            } else {
+                throw new Exception("未找到属性[" + cellValue + "]");
+            }
             m.setIndex(i);
             map.put(String.valueOf(i), m);
         }

@@ -10,6 +10,7 @@ import java.util.*;
 
 /**
  * 解析配置文件工具类
+ *
  * @auther fuyangrong
  * @create 2018/01/29
  */
@@ -17,12 +18,14 @@ public class ResolveConfigXmlUtil {
 
     /**
      * 解析配置文件
+     *
      * @param file 配置文件
-     * @return Map<String,Object> 包含className和list<Model>
+     * @return Map<String ,Object> 包含className和list<Model>
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, Object> getAssociation(File file) throws Exception {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(2);
         List<Model> list = new ArrayList<>();
         SAXReader reader = new SAXReader();
         Document document = reader.read(file);
@@ -38,8 +41,8 @@ public class ResolveConfigXmlUtil {
             String colum = property.attributeValue("colum");
             String javaType = property.attributeValue("javaType");
             String enable = property.attributeValue("enable");
-            boolean isenable = enable.isEmpty()?true:Boolean.parseBoolean(enable);
-            if(isenable){
+            boolean isenable = enable.isEmpty() || Boolean.parseBoolean(enable);
+            if (isenable) {
                 model.setFieldName(name);
                 model.setColunmName(colum);
                 model.setJavaType(javaType);

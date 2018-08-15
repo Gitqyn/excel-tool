@@ -23,6 +23,7 @@ public class GenerateConfigXmlHelper {
 
     /**
      * 生成配置文件
+     *
      * @param c        实体类
      * @param filePath 存放路径
      */
@@ -39,12 +40,14 @@ public class GenerateConfigXmlHelper {
         Field[] fields = c.getDeclaredFields();
         //添加类属性和excel表格列映射的子节点
         for (Field field : fields) {
-            Element e = root.addElement("property");
-            e.addAttribute("name", field.getName());
-            e.addAttribute("colum", null != field.getDeclaredAnnotation(ColumName.class).des() ? field.getDeclaredAnnotation(ColumName.class).des() : "");
-            e.addAttribute("javaType", field.getType().getName());
-            e.addAttribute("enable", "true");
-
+            ColumName columName = field.getDeclaredAnnotation(ColumName.class);
+            if (columName != null) {
+                Element e = root.addElement("property");
+                e.addAttribute("name", field.getName());
+                e.addAttribute("colum", columName.des());
+                e.addAttribute("javaType", field.getType().getName());
+                e.addAttribute("enable", "true");
+            }
         }
         try {
             OutputFormat xmlFormat = new OutputFormat();

@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ColumName {
 
-    String des();
-
+    String des() default "";
 
 }

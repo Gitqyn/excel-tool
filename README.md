@@ -145,7 +145,7 @@ Process finished with exit code 0
 
 调用excel导出工具类：
 
-`ExcelExportUtil.exportExcel(List<?> list, File configXml, String sheetName, String bookName)
+`ExcelExportUtil.exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File configXml, String sheetName, String bookName)
 `
 
 参数：

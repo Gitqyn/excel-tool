@@ -93,7 +93,6 @@ public class ExcelExportUtil {
         OutputStream output = null;
         try {
             String userAgent = request.getHeader("User-Agent");
-            response.reset();
             response.setHeader("Content-disposition", "attachment; filename=" + StringUtil.encodeFileName(bookName, userAgent));
             response.setContentType("application/octet-stream");
             response.setCharacterEncoding("utf-8");

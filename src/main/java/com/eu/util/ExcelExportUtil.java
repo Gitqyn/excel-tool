@@ -20,8 +20,8 @@ import java.util.Map;
 /**
  * excel导出工具类
  *
- * @auther fuyangrong
- * @create 2017/01/29
+ * @author  fuyangrong
+ * @date 2017/01/29
  */
 public class ExcelExportUtil {
 
@@ -39,7 +39,7 @@ public class ExcelExportUtil {
      */
     @SuppressWarnings("unchecked")
     public static void exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File configXml, String sheetName, String bookName) throws Exception {
-        Map<String, Object> map = ResolveConfigXmlUtil.getAssociation(configXml);
+        Map<String, Object> map = ParseConfigXmlUtil.getAssociation(configXml);
         List<Model> models = (List<Model>) map.get("list");
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet(com.eu.util.StringUtil.isEmpty(sheetName) ? "sheet1" : sheetName);
@@ -49,7 +49,7 @@ public class ExcelExportUtil {
         Row rootRow = sheet.createRow(0);
         int index = 0;
         for (Model m : models) {
-            String columName = m.getColunmName();
+            String columName = m.getColumnName();
             Cell cell = rootRow.createCell(index);
             cell.setCellValue(columName);
             CellStyle style = wb.createCellStyle();
@@ -64,21 +64,21 @@ public class ExcelExportUtil {
         }
         int rowNum = 1;
         if (list != null && list.size() > 0) {
-            for (int i = 0; i < list.size(); i++) {
+            for (Object o : list) {
                 Row row = sheet.createRow(rowNum);
                 for (Model m : models) {
                     String fieldName = m.getFieldName();
-                    String columName = m.getColunmName();
+                    String columName = m.getColumnName();
                     String javaType = m.getJavaType();
                     int num = rootMap.get(columName);
-                    Class realClass = list.get(i).getClass();
+                    Class realClass = o.getClass();
                     Method method = realClass.getDeclaredMethod("get" + String.valueOf(fieldName.charAt(0)).toUpperCase() + fieldName.substring(1));
                     String cellValue;
                     if (Date.class.getName().equals(javaType)) {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        cellValue = dateFormat.format(method.invoke(list.get(i)));
+                        cellValue = dateFormat.format(method.invoke(o));
                     } else {
-                        cellValue = String.valueOf(method.invoke(list.get(i)));
+                        cellValue = String.valueOf(method.invoke(o));
                     }
                     Cell cell = row.createCell(num);
                     cell.setCellValue(cellValue);

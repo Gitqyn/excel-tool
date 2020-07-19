@@ -3,34 +3,40 @@ package com.eu.model;
 /**
  * 配置文件实体类
  *
- * @auther fuyangrong
- * @create 2017/01/29
+ * @author  fuyangrong
+ * @date  2017/01/29
  */
 public class Model {
     /**
-     * //属性名
+     * 属性名
      */
     private String fieldName;
+
     /**
      * 列名
      */
-    private String colunmName;
+    private String columnName;
+
     /**
      * fieldName的java数据类型
      */
     private String javaType;
+
     /**
      * 验证规则
      */
     private String validate;
+
     /**
      * 验证提示信息
      */
     private String validateMessage;
+
     /**
-     * colunmName在excel行中的下标
+     * columnName在excel行中的下标
      */
     private Integer index;
+
     /**
      * 是否忽略
      */
@@ -44,12 +50,12 @@ public class Model {
         this.fieldName = fieldName;
     }
 
-    public String getColunmName() {
-        return colunmName;
+    public String getColumnName() {
+        return columnName;
     }
 
-    public void setColunmName(String colunmName) {
-        this.colunmName = colunmName;
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
     }
 
     public String getJavaType() {
@@ -90,5 +96,18 @@ public class Model {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    @Override
+    public String toString() {
+        return "Model{" +
+                "fieldName='" + fieldName + '\'' +
+                ", columnName='" + columnName + '\'' +
+                ", javaType='" + javaType + '\'' +
+                ", validate='" + validate + '\'' +
+                ", validateMessage='" + validateMessage + '\'' +
+                ", index=" + index +
+                ", enable=" + enable +
+                '}';
     }
 }

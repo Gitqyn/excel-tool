@@ -18,8 +18,8 @@ import static org.apache.poi.ss.usermodel.Cell.*;
 /**
  * excel导入工具类
  *
- * @auther fuyangrong
- * @create 2017/12/4
+ * @author  fuyangrong
+ * @date  2017/12/4
  */
 public class ExcelImportUtil {
 
@@ -143,14 +143,14 @@ public class ExcelImportUtil {
             throw new Exception("导入的excel的首行不能为空");
         }
         Map<String, Object> map = new HashMap(row.getLastCellNum());
-        Map<String, Object> rcxu = ResolveConfigXmlUtil.getAssociation(configXml);
+        Map<String, Object> rcxu = ParseConfigXmlUtil.getAssociation(configXml);
         map.put("className", rcxu.get("className").toString());
         List<Model> list = (List<Model>) rcxu.get("list");
 
         for (int i = 0; i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             String cellValue = cell.getStringCellValue();
-            Optional<Model> optional = list.stream().filter(model -> cellValue.equals(model.getColunmName())).findFirst();
+            Optional<Model> optional = list.stream().filter(model -> cellValue.equals(model.getColumnName())).findFirst();
             Model m;
             if (optional.isPresent()) {
                 m = optional.get();

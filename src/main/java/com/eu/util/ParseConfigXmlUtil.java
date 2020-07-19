@@ -11,17 +11,17 @@ import java.util.*;
 /**
  * 解析配置文件工具类
  *
- * @auther fuyangrong
- * @create 2018/01/29
+ * @author  fuyangrong
+ * @date 2018/01/29
  */
-public class ResolveConfigXmlUtil {
+public class ParseConfigXmlUtil {
 
     /**
      * 解析配置文件
      *
      * @param file 配置文件
      * @return Map<String ,Object> 包含className和list<Model>
-     * @throws Exception
+     * @throws Exception 异常
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> getAssociation(File file) throws Exception {
@@ -38,13 +38,13 @@ public class ResolveConfigXmlUtil {
             Element property = it.next();
             Model model = new Model();
             String name = property.attributeValue("name");
-            String colum = property.attributeValue("colum");
+            String colum = property.attributeValue("column");
             String javaType = property.attributeValue("javaType");
             String enable = property.attributeValue("enable");
             boolean isenable = enable.isEmpty() || Boolean.parseBoolean(enable);
             if (isenable) {
                 model.setFieldName(name);
-                model.setColunmName(colum);
+                model.setColumnName(colum);
                 model.setJavaType(javaType);
                 list.add(model);
             }

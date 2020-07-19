@@ -1,6 +1,6 @@
 package com.eu.util;
 
-import com.eu.annoation.ColumName;
+import com.eu.annoation.ColumnName;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -15,8 +15,8 @@ import java.lang.reflect.Field;
 /**
  * 自动生成配置文件工具
  *
- * @auther fuyangrong
- * @create 2017/12/1
+ * @author  fuyangrong
+ * @date  2017/12/1
  */
 public class GenerateConfigXmlHelper {
 
@@ -27,24 +27,24 @@ public class GenerateConfigXmlHelper {
      * @param c        实体类
      * @param filePath 存放路径
      */
-    public static void createConfigXML(Class c, String filePath) {
-        //建立document对象，操作xml
+    public static void createConfigXml(Class c, String filePath) {
+        // 建立document对象，操作xml
         Document doc = DocumentHelper.createDocument();
-        //设置xml编码
+        // 设置xml编码
         doc.setXMLEncoding("utf-8");
-        //设置根节点
+        // 设置根节点
         Element root = doc.addElement("class");
-        //添加根节点属性
+        // 添加根节点属性
         root.addAttribute("name", c.getName());
-        //获取类所声明的所有属性
+        // 获取类所声明的所有属性
         Field[] fields = c.getDeclaredFields();
-        //添加类属性和excel表格列映射的子节点
+        // 添加类属性和excel表格列映射的子节点
         for (Field field : fields) {
-            ColumName columName = field.getDeclaredAnnotation(ColumName.class);
-            if (columName != null) {
+            ColumnName columnName = field.getDeclaredAnnotation(ColumnName.class);
+            if (columnName != null) {
                 Element e = root.addElement("property");
                 e.addAttribute("name", field.getName());
-                e.addAttribute("colum", columName.des());
+                e.addAttribute("column", columnName.des());
                 e.addAttribute("javaType", field.getType().getName());
                 e.addAttribute("enable", "true");
             }

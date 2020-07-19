@@ -1,7 +1,11 @@
 package com.eu.util;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
+/**
+ * @author fuyangrong
+ */
 public class StringUtil {
 
     public static boolean isEmpty(String str) {
@@ -20,7 +24,7 @@ public class StringUtil {
             fileName = URLEncoder.encode(fileName, "UTF-8");
         } else {
             // 谷歌、火狐
-            fileName = new String(fileName.getBytes("UTF-8"), "iso-8859-1");
+            fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
         }
         return isEmpty(fileName) ? "workbook.xlsx" : fileName + ".xlsx";
     }

@@ -1,6 +1,6 @@
-package com.eu.util;
+package com.excel.util;
 
-import com.eu.annoation.ColumnName;
+import com.excel.annoation.ColumnName;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -20,9 +20,9 @@ import java.lang.reflect.Field;
  * @author fuyangrong
  * @date 2017/12/1
  */
-public class GenerateConfigXmlHelper {
+public class GenerateMapperXmlHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateConfigXmlHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateMapperXmlHelper.class);
 
     /**
      * 生成配置文件
@@ -30,7 +30,7 @@ public class GenerateConfigXmlHelper {
      * @param c        实体类
      * @param filePath 存放路径
      */
-    public static void createConfigXml(Class c, String filePath) {
+    public static void createMapperXml(Class c, String filePath) {
         // 建立document对象，操作xml
         Document doc = DocumentHelper.createDocument();
         // 设置xml编码

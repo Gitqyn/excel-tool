@@ -1,6 +1,6 @@
-package com.eu.util;
+package com.excel.util;
 
-import com.eu.model.Model;
+import com.excel.model.ParseModel;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -78,9 +78,9 @@ public class ExcelImportUtil {
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
                     Object cellValue = formatCellValue(cell, evaluator);
-                    Model model = (Model) map.get(String.valueOf(i));
-                    String fieldName = model.getFieldName();
-                    String javaType = model.getJavaType();
+                    ParseModel parseModel = (ParseModel) map.get(String.valueOf(i));
+                    String fieldName = parseModel.getFieldName();
+                    String javaType = parseModel.getJavaType();
                     Class c2 = Class.forName(javaType);
                     if (c2 == String.class && cellValue instanceof Double) {
                         Double doubleVal = (Double) cellValue;
@@ -148,15 +148,15 @@ public class ExcelImportUtil {
             throw new Exception("导入的excel的首行不能为空");
         }
         Map<String, Object> map = new HashMap<>(row.getLastCellNum());
-        Map<String, Object> rcxu = ParseConfigXmlUtil.getAssociation(configXml);
+        Map<String, Object> rcxu = ParseMapperXmlUtil.getAssociation(configXml);
         map.put("className", rcxu.get("className").toString());
-        List<Model> list = (List<Model>) rcxu.get("list");
+        List<ParseModel> list = (List<ParseModel>) rcxu.get("list");
         for (int i = 0; i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             String cellValue = cell.getStringCellValue();
             // TODO 忽略enable=false的行
-            Optional<Model> optional = list.stream().filter(model -> cellValue.equals(model.getColumnName())).findFirst();
-            Model m;
+            Optional<ParseModel> optional = list.stream().filter(parseModel -> cellValue.equals(parseModel.getColumnName())).findFirst();
+            ParseModel m;
             if (optional.isPresent()) {
                 m = optional.get();
             } else {

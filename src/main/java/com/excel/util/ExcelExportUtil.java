@@ -1,6 +1,6 @@
-package com.eu.util;
+package com.excel.util;
 
-import com.eu.model.Model;
+import com.excel.model.ParseModel;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -43,15 +43,15 @@ public class ExcelExportUtil {
      */
     @SuppressWarnings("unchecked")
     public static void exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File configXml, String sheetName, String bookName) throws Exception {
-        Map<String, Object> map = ParseConfigXmlUtil.getAssociation(configXml);
-        List<Model> models = (List<Model>) map.get("list");
+        Map<String, Object> map = ParseMapperXmlUtil.getAssociation(configXml);
+        List<ParseModel> parseModels = (List<ParseModel>) map.get("list");
         Workbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet(com.eu.util.StringUtil.isEmpty(sheetName) ? "sheet1" : sheetName);
-        Map<String, Integer> rootMap = new HashMap<>(models.size());
+        Sheet sheet = wb.createSheet(com.excel.util.StringUtil.isEmpty(sheetName) ? "sheet1" : sheetName);
+        Map<String, Integer> rootMap = new HashMap<>(parseModels.size());
         //表头
         Row rootRow = sheet.createRow(0);
         int index = 0;
-        for (Model m : models) {
+        for (ParseModel m : parseModels) {
             String columName = m.getColumnName();
             Cell cell = rootRow.createCell(index);
             cell.setCellValue(columName);
@@ -69,7 +69,7 @@ public class ExcelExportUtil {
         if (list != null && list.size() > 0) {
             for (Object o : list) {
                 Row row = sheet.createRow(rowNum);
-                for (Model m : models) {
+                for (ParseModel m : parseModels) {
                     String fieldName = m.getFieldName();
                     String columName = m.getColumnName();
                     String javaType = m.getJavaType();
@@ -89,7 +89,7 @@ public class ExcelExportUtil {
                 }
                 rowNum++;
             }
-            adjustColumnSize(sheet, models.size());
+            adjustColumnSize(sheet, parseModels.size());
         }
         OutputStream output = null;
         try {

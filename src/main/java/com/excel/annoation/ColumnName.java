@@ -1,4 +1,4 @@
-package com.eu.annoation;
+package com.excel.annoation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

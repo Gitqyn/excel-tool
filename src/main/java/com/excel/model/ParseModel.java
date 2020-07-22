@@ -1,4 +1,4 @@
-package com.eu.model;
+package com.excel.model;
 
 /**
  * 配置文件实体类
@@ -6,7 +6,7 @@ package com.eu.model;
  * @author  fuyangrong
  * @date  2017/01/29
  */
-public class Model {
+public class ParseModel {
     /**
      * 属性名
      */

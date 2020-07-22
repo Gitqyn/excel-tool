@@ -6,6 +6,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,11 +17,12 @@ import java.lang.reflect.Field;
 /**
  * 自动生成配置文件工具
  *
- * @author  fuyangrong
- * @date  2017/12/1
+ * @author fuyangrong
+ * @date 2017/12/1
  */
 public class GenerateConfigXmlHelper {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateConfigXmlHelper.class);
 
     /**
      * 生成配置文件
@@ -62,9 +65,9 @@ public class GenerateConfigXmlHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("自动生成配置文件成功");
-
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("自动生成配置文件成功");
+        }
     }
-
 
 }

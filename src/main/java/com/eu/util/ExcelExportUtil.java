@@ -3,6 +3,8 @@ package com.eu.util;
 import com.eu.model.Model;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,10 +22,12 @@ import java.util.Map;
 /**
  * excel导出工具类
  *
- * @author  fuyangrong
+ * @author fuyangrong
  * @date 2017/01/29
  */
 public class ExcelExportUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelExportUtil.class);
 
 
     /**
@@ -43,7 +47,6 @@ public class ExcelExportUtil {
         List<Model> models = (List<Model>) map.get("list");
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet(com.eu.util.StringUtil.isEmpty(sheetName) ? "sheet1" : sheetName);
-
         Map<String, Integer> rootMap = new HashMap<>(models.size());
         //表头
         Row rootRow = sheet.createRow(0);
@@ -86,10 +89,8 @@ public class ExcelExportUtil {
                 }
                 rowNum++;
             }
-
             adjustColumnSize(sheet, models.size());
         }
-
         OutputStream output = null;
         try {
             String userAgent = request.getHeader("User-Agent");
@@ -99,14 +100,12 @@ public class ExcelExportUtil {
             output = response.getOutputStream();
             wb.write(output);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } finally {
             if (output != null) {
                 output.close();
             }
         }
-
-
     }
 
     /**

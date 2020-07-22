@@ -4,6 +4,8 @@ import com.eu.model.Model;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,10 +20,12 @@ import static org.apache.poi.ss.usermodel.Cell.*;
 /**
  * excel导入工具类
  *
- * @author  fuyangrong
- * @date  2017/12/4
+ * @author fuyangrong
+ * @date 2017/12/4
  */
 public class ExcelImportUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelImportUtil.class);
 
     private static final String XLSX_SUFFIX = ".xlsx";
     private static final String XLS_SUFFIX = ".xls";
@@ -29,7 +33,7 @@ public class ExcelImportUtil {
 
     private static Workbook readFile(File file) throws Exception {
         InputStream fis = new FileInputStream(file);
-        Workbook workbook = null;
+        Workbook workbook;
         String fileName = file.getName();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
         if (XLSX_SUFFIX.equals(suffix)) {
@@ -41,7 +45,6 @@ public class ExcelImportUtil {
         }
         fis.close();
         return workbook;
-
     }
 
     /**
@@ -57,12 +60,12 @@ public class ExcelImportUtil {
         List<T> list = new ArrayList<>();
         Workbook wb = ExcelImportUtil.readFile(excel);
         FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
-
         for (int k = 0; k < wb.getNumberOfSheets(); k++) {
             Sheet sheet = wb.getSheetAt(k);
             int rows = sheet.getPhysicalNumberOfRows();
-            System.out.println("Sheet " + k + " \"" + wb.getSheetName(k) + "\" has " + rows
-                    + " row(s).");
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("Sheet {} \"{}\" has {} row(s).", k, wb.getSheetName(k), rows);
+            }
             Row firstRow = sheet.getRow(0);
             Map<String, Object> map = getMapRelation(firstRow, configXml);
             Class c = Class.forName(map.get("className").toString());
@@ -71,7 +74,6 @@ public class ExcelImportUtil {
                 if (row == null) {
                     continue;
                 }
-
                 T object = (T) c.newInstance();
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
@@ -81,11 +83,16 @@ public class ExcelImportUtil {
                     String javaType = model.getJavaType();
                     Class c2 = Class.forName(javaType);
                     if (c2 == String.class && cellValue instanceof Double) {
-                        double dnum = (Double) formatCellValue(cell, evaluator);
-                        cellValue = String.valueOf((int) dnum);
-                    } else if (c2 == Integer.class) {
-                        double dnum = (Double) formatCellValue(cell, evaluator);
-                        cellValue = (int) dnum;
+                        Double doubleVal = (Double) cellValue;
+                        cellValue = doubleVal.toString();
+                    }
+                    if (c2 == String.class && cellValue instanceof Integer) {
+                        Integer integerVal = (Integer) cellValue;
+                        cellValue = integerVal.toString();
+                    }
+                    if (c2 == String.class && cellValue instanceof Long) {
+                        Long longVal = (Long) cellValue;
+                        cellValue = longVal.toString();
                     }
                     Method method = c.getDeclaredMethod("set" + String.valueOf(fieldName.charAt(0)).toUpperCase() + fieldName.substring(1), c2);
                     method.invoke(object, cellValue);
@@ -112,7 +119,6 @@ public class ExcelImportUtil {
                         value = cell.getNumericCellValue();
                     }
                     break;
-
                 case CELL_TYPE_STRING:
                     value = cell.getStringCellValue();
                     break;
@@ -128,7 +134,6 @@ public class ExcelImportUtil {
                 case CELL_TYPE_ERROR:
                     value = String.valueOf(cell.getErrorCellValue());
                     break;
-
                 default:
                     throw new Exception("UNKNOWN value of type " + cell.getCellType());
             }
@@ -142,14 +147,14 @@ public class ExcelImportUtil {
         if (row == null) {
             throw new Exception("导入的excel的首行不能为空");
         }
-        Map<String, Object> map = new HashMap(row.getLastCellNum());
+        Map<String, Object> map = new HashMap<>(row.getLastCellNum());
         Map<String, Object> rcxu = ParseConfigXmlUtil.getAssociation(configXml);
         map.put("className", rcxu.get("className").toString());
         List<Model> list = (List<Model>) rcxu.get("list");
-
         for (int i = 0; i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             String cellValue = cell.getStringCellValue();
+            // TODO 忽略enable=false的行
             Optional<Model> optional = list.stream().filter(model -> cellValue.equals(model.getColumnName())).findFirst();
             Model m;
             if (optional.isPresent()) {

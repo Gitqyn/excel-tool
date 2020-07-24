@@ -18,7 +18,7 @@ excel导入导出通用组件
   
 参数
 - `c`: excel数据导入后保存到该类的实例
-- `filePath`: 生成的配置文件保存路径
+- `filePath`: 生成的映射文件保存路径
 
 ```
 public class Demo {
@@ -99,7 +99,7 @@ _class_
    <property name="num" javaType="java.lang.Integer" enable="true" column="编号" index="" validate="" validateMessage=""/>
 </class>
 ```
-_生成的配置文件_
+_生成的映射文件_
 
 #### 2、配置excel列和class属性的映射关系
 
@@ -120,7 +120,7 @@ _生成的配置文件_
 `ExcelImportUtil.parseFile(File excel, File mapperXml)`
 
 - `excel`: excel文件
-- `mapperXml`: 配置文件
+- `mapperXml`: 映射文件
 
 执行结果：
 ```

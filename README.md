@@ -140,7 +140,8 @@ Process finished with exit code 0
 
 调用excel导出工具类：
 
-####导出数据到工作簿
+#### 导出数据到工作簿
+
 `ExcelExportUtil.exportExcel(List<?> list, File configXml, String sheetName)
 `
 
@@ -149,7 +150,8 @@ Process finished with exit code 0
 - `mapperXml`: 映射文件
 - `sheetName`:  sheet名称,不指定的话可传null
 
-####导出数据到浏览器
+#### 导出数据到浏览器
+
 `ExcelExportUtil.exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File mapperXml, String sheetName, String bookName)
 `
 

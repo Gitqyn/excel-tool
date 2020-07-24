@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 解析配置文件工具类
@@ -23,36 +25,41 @@ public class ParseMapperXmlUtil {
     /**
      * 解析配置文件
      *
-     * @param file 配置文件
-     * @return Map<String, Object> 包含className和list<Model>
+     * @param mapper 配置文件
+     * @return List<ParseModel>
      * @throws Exception 异常
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> getAssociation(File file) throws Exception {
-        Map<String, Object> map = new HashMap<>(2);
+    public static List<ParseModel> getAssociation(File mapper) throws Exception {
         List<ParseModel> list = new ArrayList<>();
         SAXReader reader = new SAXReader();
-        Document document = reader.read(file);
+        Document document = reader.read(mapper);
         Element root = document.getRootElement();
         String className = root.attributeValue("name");
-        map.put("className", className);
         for (Iterator<Element> it = root.elementIterator("property"); it.hasNext(); ) {
             Element property = it.next();
             ParseModel parseModel = new ParseModel();
             String name = property.attributeValue("name");
-            String colum = property.attributeValue("column");
+            String column = property.attributeValue("column");
             String javaType = property.attributeValue("javaType");
             String enable = property.attributeValue("enable");
-            boolean isenable = enable.isEmpty() || Boolean.parseBoolean(enable);
-            if (isenable) {
+            String index = property.attributeValue("index");
+            String validate = property.attributeValue("validate");
+            String validateMessage = property.attributeValue("validateMessage");
+            boolean isEnable = enable.isEmpty() || Boolean.parseBoolean(enable);
+            if (isEnable) {
+                parseModel.setClassName(className);
                 parseModel.setFieldName(name);
-                parseModel.setColumnName(colum);
                 parseModel.setJavaType(javaType);
+                parseModel.setColumnName(column);
+                if (!StringUtil.isEmpty(index)) {
+                    parseModel.setIndex(Integer.parseInt(index));
+                }
+                parseModel.setValidate(validate);
+                parseModel.setValidateMessage(validateMessage);
                 list.add(parseModel);
             }
         }
-        map.put("list", list);
-
-        return map;
+        return list;
     }
 }

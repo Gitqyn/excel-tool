@@ -1,6 +1,5 @@
 package com.excel.util;
 
-import com.excel.annoation.ColumnName;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -43,14 +42,15 @@ public class GenerateMapperXmlHelper {
         Field[] fields = c.getDeclaredFields();
         // 添加类属性和excel表格列映射的子节点
         for (Field field : fields) {
-            ColumnName columnName = field.getDeclaredAnnotation(ColumnName.class);
-            if (columnName != null) {
-                Element e = root.addElement("property");
-                e.addAttribute("name", field.getName());
-                e.addAttribute("column", columnName.des());
-                e.addAttribute("javaType", field.getType().getName());
-                e.addAttribute("enable", "true");
-            }
+            Element e = root.addElement("property");
+            e.addAttribute("name", field.getName());
+            e.addAttribute("javaType", field.getType().getName());
+            e.addAttribute("enable", "true");
+            e.addAttribute("column", "");
+            e.addAttribute("index", "");
+            e.addAttribute("validate", "");
+            e.addAttribute("validateMessage", "");
+
         }
         try {
             OutputFormat xmlFormat = new OutputFormat();

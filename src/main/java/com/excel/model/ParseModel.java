@@ -1,5 +1,7 @@
 package com.excel.model;
 
+import java.util.Objects;
+
 /**
  * 配置文件实体类
  *
@@ -7,6 +9,12 @@ package com.excel.model;
  * @date  2017/01/29
  */
 public class ParseModel {
+
+    /**
+     * 类名
+     */
+    private String className;
+
     /**
      * 属性名
      */
@@ -41,6 +49,14 @@ public class ParseModel {
      * 是否忽略
      */
     private boolean enable;
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
     public String getFieldName() {
         return fieldName;
@@ -99,9 +115,30 @@ public class ParseModel {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParseModel that = (ParseModel) o;
+        return enable == that.enable &&
+                Objects.equals(className, that.className) &&
+                Objects.equals(fieldName, that.fieldName) &&
+                Objects.equals(columnName, that.columnName) &&
+                Objects.equals(javaType, that.javaType) &&
+                Objects.equals(validate, that.validate) &&
+                Objects.equals(validateMessage, that.validateMessage) &&
+                Objects.equals(index, that.index);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(className, fieldName, columnName, javaType, validate, validateMessage, index, enable);
+    }
+
+    @Override
     public String toString() {
-        return "Model{" +
-                "fieldName='" + fieldName + '\'' +
+        return "ParseModel{" +
+                "className='" + className + '\'' +
+                ", fieldName='" + fieldName + '\'' +
                 ", columnName='" + columnName + '\'' +
                 ", javaType='" + javaType + '\'' +
                 ", validate='" + validate + '\'' +

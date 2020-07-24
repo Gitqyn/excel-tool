@@ -33,28 +33,24 @@ public class ExcelExportUtil {
     /**
      * 导出Excel
      *
-     * @param request   HttpServletRequest
-     * @param response  HttpServletResponse
      * @param list      导出数据
-     * @param configXml 配置文件
+     * @param mapperXml 配置文件
      * @param sheetName sheet名称
-     * @param bookName  导出文件名
      * @throws Exception 异常
      */
     @SuppressWarnings("unchecked")
-    public static void exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File configXml, String sheetName, String bookName) throws Exception {
-        Map<String, Object> map = ParseMapperXmlUtil.getAssociation(configXml);
-        List<ParseModel> parseModels = (List<ParseModel>) map.get("list");
+    public static Workbook exportExcel(List<?> list, File mapperXml, String sheetName) throws Exception {
+        List<ParseModel> parseModelList = ParseMapperXmlUtil.getAssociation(mapperXml);
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet(com.excel.util.StringUtil.isEmpty(sheetName) ? "sheet1" : sheetName);
-        Map<String, Integer> rootMap = new HashMap<>(parseModels.size());
+        Map<String, Integer> rootMap = new HashMap<>(parseModelList.size());
         //表头
         Row rootRow = sheet.createRow(0);
         int index = 0;
-        for (ParseModel m : parseModels) {
-            String columName = m.getColumnName();
+        for (ParseModel m : parseModelList) {
+            String columnName = m.getColumnName();
             Cell cell = rootRow.createCell(index);
-            cell.setCellValue(columName);
+            cell.setCellValue(columnName);
             CellStyle style = wb.createCellStyle();
             style.setAlignment(HorizontalAlignment.CENTER);
             cell.setCellStyle(style);
@@ -62,14 +58,14 @@ public class ExcelExportUtil {
             font.setFontName("黑体");
             font.setFontHeightInPoints((short) 12);
             style.setFont(font);
-            rootMap.put(columName, index);
+            rootMap.put(columnName, index);
             index++;
         }
         int rowNum = 1;
         if (list != null && list.size() > 0) {
             for (Object o : list) {
                 Row row = sheet.createRow(rowNum);
-                for (ParseModel m : parseModels) {
+                for (ParseModel m : parseModelList) {
                     String fieldName = m.getFieldName();
                     String columName = m.getColumnName();
                     String javaType = m.getJavaType();
@@ -89,8 +85,24 @@ public class ExcelExportUtil {
                 }
                 rowNum++;
             }
-            adjustColumnSize(sheet, parseModels.size());
+            adjustColumnSize(sheet, parseModelList.size());
         }
+        return wb;
+    }
+
+    /**
+     * 导出Excel
+     *
+     * @param request   HttpServletRequest
+     * @param response  HttpServletResponse
+     * @param list      导出数据
+     * @param mapperXml 配置文件
+     * @param sheetName sheet名称
+     * @param bookName  导出文件名
+     * @throws Exception 异常
+     */
+    public static void exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File mapperXml, String sheetName, String bookName) throws Exception {
+        Workbook workbook = exportExcel(list, mapperXml, sheetName);
         OutputStream output = null;
         try {
             String userAgent = request.getHeader("User-Agent");
@@ -98,7 +110,7 @@ public class ExcelExportUtil {
             response.setContentType("application/octet-stream");
             response.setCharacterEncoding("utf-8");
             output = response.getOutputStream();
-            wb.write(output);
+            workbook.write(output);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         } finally {
@@ -111,8 +123,8 @@ public class ExcelExportUtil {
     /**
      * 自动调整列宽
      *
-     * @param sheet
-     * @param columnNum
+     * @param sheet     表格
+     * @param columnNum 字段下标
      */
     private static void adjustColumnSize(Sheet sheet, int columnNum) {
         for (int i = 0; i < columnNum; i++) {

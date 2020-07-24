@@ -3,7 +3,7 @@ excel导入导出通用组件
 
 ### 版本：
 - jdk: 1.8
-- poi: 3.17
+- poi: 4.1.2
 - dom4j: 1.6.1
 
 
@@ -11,8 +11,8 @@ excel导入导出通用组件
 
 ### 导入
 
-##### 1、生成配置文件
-调用自动生成配置文件工具类：
+#### 1、生成映射文件
+调用自动生成映射文件工具类：
 
 `GenerateMapperXmlHelper.createMapperXml(Class c, String filePath)`
   
@@ -23,19 +23,14 @@ excel导入导出通用组件
 ```
 public class Demo {
 
-    @ColumName(des="id")
     private Integer id;
 
-    @ColumName(des="用户名")
     private String userName;
 
-    @ColumName(des="部门")
     private String department;
 
-    @ColumName(des="编号")
     private String userCode;
 
-    @ColumName(des="年龄")
     private Integer age;
 
     public Demo() {
@@ -98,35 +93,34 @@ _class_
 <?xml version="1.0" encoding="UTF-8"?>
 
 <class name="com.excel.Demo">
-   <property name="id" colum="id" javaType="java.lang.Integer" enable="true"/>
-   <property name="userName" colum="用户名" javaType="java.lang.String" enable="true"/>
-   <property name="department" colum="部门" javaType="java.lang.String" enable="true"/>
-   <property name="userCode" colum="编号" javaType="java.lang.String" enable="true"/>
-   <property name="age" colum="年龄" javaType="java.lang.Integer" enable="true"/>
+   <property name="name" javaType="java.lang.String" enable="true" column="用户名" index="" validate="" validateMessage=""/>
+   <property name="deptName" javaType="java.lang.String" enable="true" column="部门" index="" validate="" validateMessage=""/>
+   <property name="age" javaType="java.lang.Integer" enable="true" column="年龄" index="" validate="" validateMessage=""/>
+   <property name="num" javaType="java.lang.Integer" enable="true" column="编号" index="" validate="" validateMessage=""/>
 </class>
 ```
 _生成的配置文件_
 
-##### 2、配置excel列和class属性的映射关系
+#### 2、配置excel列和class属性的映射关系
 
 根节点`class`只有一个元素`name`,值为类的全限定名
 
 `property节点`：
-- `name`： class的属性名
-- `colum`： excle的列名
-- `javaType`： class的属性的声明类型
+- `name`： excel表格列对应的java对象属性名，必填
+- `column`： excel的列名（和index属性二选一，必填一个），必填
+- `javaType`： excel表格列对应的java对象属性类型，必填
 - `enable`:  可选属性，默认值true，值为false时，解析该配置文件将跳过此行
+- `index`:  excel表格列索引（和column属性二选一，必填一个）
 
-_注：以上节点均为必填_，其中如果在`class`中的属性上使用`@ColumName(des="colum")`注解，`colum`元素值也会自动填充
+> 注：映射文件生成后，需要根据导入的表格，填写映射文件的column或index属性值
 
-##### 3、导入excel
+#### 3、导入excel
 调用excel导入工具类
 
-`ExcelImportUtil.convertToClass(File excel, File configXml)`
+`ExcelImportUtil.parseFile(File excel, File mapperXml)`
 
-参数：
 - `excel`: excel文件
-- `configXml`: 配置文件
+- `mapperXml`: 配置文件
 
 执行结果：
 ```
@@ -140,17 +134,30 @@ Sheet 0 "Sheet1" has 1007 row(s).
 Process finished with exit code 0
 
 ```
+> 为满足各种场景，ExcelImportUtil.parseFile有多种重载方法，具体使用哪种视具体情况而定。
 
 ### 导出
 
 调用excel导出工具类：
 
-`ExcelExportUtil.exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File configXml, String sheetName, String bookName)
+####导出数据到工作簿
+`ExcelExportUtil.exportExcel(List<?> list, File configXml, String sheetName)
 `
 
 参数：
 - `list`: 需要导出的数据集合
-- `configXml`: 配置文件
-- `sheetName`:  sheet名称,可传null
-- `bookName`:   工作簿名称,可传null
+- `mapperXml`: 映射文件
+- `sheetName`:  sheet名称,不指定的话可传null
+
+####导出数据到浏览器
+`ExcelExportUtil.exportExcel(HttpServletRequest request, HttpServletResponse response, List<?> list, File mapperXml, String sheetName, String bookName)
+`
+
+参数：
+- `request`: request对象
+- `response`: response对象
+- `list`: 需要导出的数据集合
+- `mapperXml`: 映射文件
+- `sheetName`:  sheet名称,不指定的话可传null
+- `bookName`:   工作簿名称,不指定的话可传null
 
